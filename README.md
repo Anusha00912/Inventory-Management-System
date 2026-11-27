@@ -58,6 +58,27 @@ Tables are created automatically on first start, and sample data is loaded into 
 | `DATABASE_URL` | PostgreSQL connection string        | –       |
 | `PORT`         | Port the server listens on          | `3000`  |
 
+## Testing
+
+Both suites need a **dedicated test database** (never the application's own); each refuses to run if its database matches the app's `DATABASE_URL`, and wipes and re-seeds that database.
+
+### UI regression tests (Playwright, headed)
+```bash
+npx playwright install chromium
+cp .env.e2e.example .env.e2e      # set E2E_DATABASE_URL to a test database
+npm run test:e2e                  # also: test:e2e:ui, test:e2e:report
+```
+44 specs cover the dashboard, products, sales, purchases, the movements ledger, persistence, the API contract, and an isolation canary. They run in a visible browser by design.
+
+### Load tests (k6)
+Install [k6](https://k6.io/docs/get-started/installation/), then:
+```bash
+cp .env.perf.example .env.perf    # set PERF_DATABASE_URL to a test database
+npm run perf:smoke                # ~25s validation run
+npm run perf                      # 50 users, 30s ramp, 5 min total, 2s think time
+```
+Thresholds: average < 500 ms, P95 < 1000 ms, errors < 1%. Each run writes an HTML report, JSON results and a summary to `perf/results/<timestamp>/`. Override settings with flags, e.g. `node perf/run.mjs --vus 100 --duration 2m --p95 800`.
+
 ## Future Enhancements
 
 - User authentication and role-based access
