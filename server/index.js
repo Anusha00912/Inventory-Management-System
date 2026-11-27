@@ -11,6 +11,7 @@ const port = Number(process.env.PORT) || 3000
 await db.init()
 const app = express()
 app.use(express.json())
+app.get('/api/health', (req, res) => res.json({ ok: true })) // cheap liveness check, no DB access
 app.use('/api', api)
 
 if (prod) {

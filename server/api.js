@@ -112,8 +112,11 @@ api.post('/adjustments', mutate(async (c, req) => {
     [randomUUID(), product.id, 'adjustment', qty, str(b.note, 'Note', false) || 'Manual adjustment'])
 }))
 
+// Wipes all data, so it is disabled in production unless ALLOW_RESET=true is set explicitly.
+const isProd = process.argv.includes('--prod') || process.env.NODE_ENV === 'production'
 api.post('/reset', async (req, res, next) => {
   try {
+    if (isProd && process.env.ALLOW_RESET !== 'true') throw new HttpError(403, 'Reset is disabled on this server')
     await db.reset()
     res.json(await db.getState())
   } catch (e) { next(e) }

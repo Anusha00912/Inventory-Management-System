@@ -113,7 +113,7 @@ async function main() {
   const log = fs.openSync(path.join(resultDir, 'server.log'), 'w')
   const server = spawn(process.execPath, ['server/index.js', '--prod'], {
     cwd: ROOT,
-    env: { ...process.env, DATABASE_URL: env.databaseUrl, PORT: String(env.port), NODE_ENV: 'production' },
+    env: { ...process.env, DATABASE_URL: env.databaseUrl, PORT: String(env.port), NODE_ENV: 'production', ALLOW_RESET: 'true' },
     stdio: ['ignore', log, log],
   })
   let serverExited = false

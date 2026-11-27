@@ -59,6 +59,7 @@ export function loadE2eEnv() {
       DATABASE_URL: databaseUrl,
       PORT: String(port),
       NODE_ENV: 'production',
+      ALLOW_RESET: 'true', // the e2e suite resets its own test database
     },
   }
 }

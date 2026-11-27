@@ -1,0 +1,16 @@
+# Render Blueprint: one web service serves the API and the built React app.
+services:
+  - type: web
+    name: inventory-management-system
+    runtime: node
+    region: ohio          # closest Render region to Neon us-east-2 (database round-trips dominate latency)
+    plan: free            # free instances sleep after 15 min idle; upgrade for always-on
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 24
+      - key: DATABASE_URL
+        sync: false       # set in the Render dashboard; never commit it
+      # ALLOW_RESET is intentionally NOT set: POST /api/reset returns 403 in production
