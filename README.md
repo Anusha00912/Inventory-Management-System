@@ -79,6 +79,14 @@ npm run perf                      # 50 users, 30s ramp, 5 min total, 2s think ti
 ```
 Thresholds: average < 500 ms, P95 < 1000 ms, errors < 1%. Each run writes an HTML report, JSON results and a summary to `perf/results/<timestamp>/`. Override settings with flags, e.g. `node perf/run.mjs --vus 100 --duration 2m --p95 800`.
 
+### Latest load-test results
+Baseline run (50 users, 5 min): **FAIL** against the thresholds, avg 9.9 s, P95 18.2 s, 3.6 req/s.
+- [Performance summary](perf/reports/2026-11-27T15-13-15-288Z/performance-summary.md)
+- [Bottleneck analysis](perf/reports/2026-11-27T15-13-15-288Z/ANALYSIS.md)
+- [Interactive HTML report](https://htmlpreview.github.io/?https://github.com/Anusha00912/Inventory-Management-System/blob/main/perf/reports/2026-11-27T15-13-15-288Z/report.html) (GitHub shows .html as source; this opens it rendered)
+
+Publish a new run with `npm run perf:publish` (copies a trimmed, host-redacted set into `perf/reports/`).
+
 ## Future Enhancements
 
 - User authentication and role-based access
